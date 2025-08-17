@@ -89,7 +89,7 @@ function ExpenseApp() {
         <div className="container mx-auto px-4 py-6">
           <div className="text-center text-sm text-muted-foreground">
             <p>تطبيق إدارة المصاريف الشخصية - جميع البيانات محفوظة محلياً في متصفحك</p>
-            <p className="mt-1">مطور بواسطة Lovable مع الحب ❤️</p>
+            <p className="mt-1">مطور بواسطة سارة ❤️</p>
           </div>
         </div>
       </footer>
