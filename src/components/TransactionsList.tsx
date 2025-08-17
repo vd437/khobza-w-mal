@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Trash2, TrendingUp, TrendingDown, Filter } from "lucide-react";
+import { Trash2, TrendingUp, TrendingDown, Filter, CreditCard, UtensilsCrossed, Car, ShoppingBag, Zap, Heart, Film, GraduationCap, MoreHorizontal, Briefcase, Building2, Laptop, Gift, DollarSign } from "lucide-react";
 import { format } from "date-fns";
 import { ar } from "date-fns/locale";
 import { useExpense } from "@/contexts/ExpenseContext";
@@ -26,9 +26,18 @@ export function TransactionsList() {
 
   const formatAmount = (amount: number, currency: string) => {
     if (settings.hideAmounts) return '****';
+    
+    const currencyMap: { [key: string]: string } = {
+      'USD': 'USD', 'EUR': 'EUR', 'GBP': 'GBP',
+      'SAR': 'SAR', 'AED': 'AED', 'EGP': 'EGP',
+      'JOD': 'JOD', 'KWD': 'KWD', 'QAR': 'QAR',
+      'BHD': 'BHD', 'OMR': 'OMR', 'LBP': 'LBP',
+      'MAD': 'MAD', 'TND': 'TND', 'DZD': 'DZD'
+    };
+    
     return new Intl.NumberFormat('ar-SA', {
       style: 'currency',
-      currency: currency === 'USD' ? 'USD' : 'SAR',
+      currency: currencyMap[currency] || 'USD',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(amount);
@@ -37,16 +46,40 @@ export function TransactionsList() {
   const getCategoryInfo = (categoryId: string) => {
     return allCategories.find(c => c.id === categoryId) || {
       name: categoryId,
-      icon: '📝',
+      icon: 'MoreHorizontal',
       color: '#8884d8'
     };
+  };
+  
+  const renderCategoryIcon = (iconName: string) => {
+    const iconMap: { [key: string]: any } = {
+      'UtensilsCrossed': UtensilsCrossed,
+      'Car': Car,
+      'ShoppingBag': ShoppingBag,
+      'Zap': Zap,
+      'Heart': Heart,
+      'Film': Film,
+      'GraduationCap': GraduationCap,
+      'MoreHorizontal': MoreHorizontal,
+      'Briefcase': Briefcase,
+      'Building2': Building2,
+      'Laptop': Laptop,
+      'TrendingUp': TrendingUp,
+      'Gift': Gift,
+      'DollarSign': DollarSign,
+    };
+    
+    const IconComponent = iconMap[iconName] || MoreHorizontal;
+    return <IconComponent className="h-5 w-5" />;
   };
 
   if (transactions.length === 0) {
     return (
       <Card>
         <CardContent className="flex flex-col items-center justify-center py-12">
-          <div className="text-6xl mb-4">💳</div>
+          <div className="mb-4">
+            <CreditCard className="h-16 w-16 text-muted-foreground" />
+          </div>
           <h3 className="text-lg font-semibold mb-2">لا توجد معاملات</h3>
           <p className="text-muted-foreground text-center">
             ابدأ بإضافة معاملاتك المالية لتتبع مصاريفك ودخلك
@@ -100,7 +133,7 @@ export function TransactionsList() {
                   {allCategories.map((category) => (
                     <SelectItem key={category.id} value={category.id}>
                       <div className="flex items-center gap-2">
-                        <span>{category.icon}</span>
+                        {renderCategoryIcon(category.icon)}
                         {category.name}
                       </div>
                     </SelectItem>
@@ -125,39 +158,38 @@ export function TransactionsList() {
                 <div
                   key={transaction.id}
                   className={cn(
-                    "flex items-center justify-between p-4 rounded-lg border transition-colors hover:bg-muted/50",
+                    "flex items-center gap-3 p-4 rounded-lg border transition-colors hover:bg-muted/50",
                     transaction.type === 'income' 
                       ? "border-success/20 bg-success/5" 
                       : "border-danger/20 bg-danger/5"
                   )}
                 >
-                  <div className="flex items-center gap-3">
-                    <div className={cn(
-                      "w-10 h-10 rounded-full flex items-center justify-center text-lg",
-                      transaction.type === 'income' ? "bg-success/10" : "bg-danger/10"
-                    )}>
-                      {categoryInfo.icon}
-                    </div>
-                    <div>
-                      <h4 className="font-medium">{transaction.description}</h4>
-                      <div className="flex items-center gap-2 mt-1">
-                        <Badge 
-                          variant="secondary" 
-                          className="text-xs"
-                          style={{ backgroundColor: `${categoryInfo.color}20`, color: categoryInfo.color }}
-                        >
-                          {categoryInfo.name}
-                        </Badge>
-                        <span className="text-xs text-muted-foreground">
-                          {format(new Date(transaction.date), 'dd MMM yyyy', { locale: ar })}
-                        </span>
-                      </div>
+                  <div className={cn(
+                    "w-10 h-10 rounded-full flex items-center justify-center shrink-0",
+                    transaction.type === 'income' ? "bg-success/10" : "bg-danger/10"
+                  )}>
+                    {renderCategoryIcon(categoryInfo.icon)}
+                  </div>
+                  
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-medium truncate">{transaction.description}</h4>
+                    <div className="flex items-center gap-2 mt-1">
+                      <Badge 
+                        variant="secondary" 
+                        className="text-xs shrink-0"
+                        style={{ backgroundColor: `${categoryInfo.color}20`, color: categoryInfo.color }}
+                      >
+                        {categoryInfo.name}
+                      </Badge>
+                      <span className="text-xs text-muted-foreground truncate">
+                        {format(new Date(transaction.date), 'dd MMM yyyy', { locale: ar })}
+                      </span>
                     </div>
                   </div>
                   
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2 shrink-0">
                     <div className={cn(
-                      "text-right font-semibold",
+                      "text-right font-semibold whitespace-nowrap",
                       transaction.type === 'income' ? "text-success" : "text-danger"
                     )}>
                       <div className="flex items-center gap-1">
@@ -166,7 +198,7 @@ export function TransactionsList() {
                         ) : (
                           <TrendingDown className="h-4 w-4" />
                         )}
-                        {formatAmount(transaction.amount, settings.currency)}
+                        <span className="text-sm">{formatAmount(transaction.amount, settings.currency)}</span>
                       </div>
                     </div>
                     
@@ -174,7 +206,7 @@ export function TransactionsList() {
                       variant="ghost"
                       size="sm"
                       onClick={() => deleteTransaction(transaction.id)}
-                      className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                      className="text-destructive hover:text-destructive hover:bg-destructive/10 shrink-0"
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>

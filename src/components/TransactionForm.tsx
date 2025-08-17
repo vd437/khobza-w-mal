@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon, Plus, TrendingUp, TrendingDown } from "lucide-react";
+import { CalendarIcon, Plus, TrendingUp, TrendingDown, UtensilsCrossed, Car, ShoppingBag, Zap, Heart, Film, GraduationCap, MoreHorizontal, Briefcase, Building2, Laptop, Gift, DollarSign } from "lucide-react";
 import { format } from "date-fns";
 import { ar } from "date-fns/locale";
 import { cn } from "@/lib/utils";
@@ -41,6 +41,28 @@ export function TransactionForm() {
 
   const watchType = form.watch("type");
   const categories = watchType === "income" ? INCOME_CATEGORIES : EXPENSE_CATEGORIES;
+  
+  const renderCategoryIcon = (iconName: string) => {
+    const iconMap: { [key: string]: any } = {
+      'UtensilsCrossed': UtensilsCrossed,
+      'Car': Car,
+      'ShoppingBag': ShoppingBag,
+      'Zap': Zap,
+      'Heart': Heart,
+      'Film': Film,
+      'GraduationCap': GraduationCap,
+      'MoreHorizontal': MoreHorizontal,
+      'Briefcase': Briefcase,
+      'Building2': Building2,
+      'Laptop': Laptop,
+      'TrendingUp': TrendingUp,
+      'Gift': Gift,
+      'DollarSign': DollarSign,
+    };
+    
+    const IconComponent = iconMap[iconName] || MoreHorizontal;
+    return <IconComponent className="h-4 w-4" />;
+  };
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     addTransaction({
@@ -134,7 +156,7 @@ export function TransactionForm() {
                       {categories.map((category) => (
                         <SelectItem key={category.id} value={category.id}>
                           <div className="flex items-center gap-2">
-                            <span>{category.icon}</span>
+                            {renderCategoryIcon(category.icon)}
                             {category.name}
                           </div>
                         </SelectItem>

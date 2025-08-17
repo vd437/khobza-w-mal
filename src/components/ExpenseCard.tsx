@@ -22,9 +22,18 @@ export function ExpenseCard({
 }: ExpenseCardProps) {
   const formatAmount = (value: number) => {
     if (hideAmount) return '****';
+    
+    const currencyMap: { [key: string]: string } = {
+      'USD': 'USD', 'EUR': 'EUR', 'GBP': 'GBP',
+      'SAR': 'SAR', 'AED': 'AED', 'EGP': 'EGP',
+      'JOD': 'JOD', 'KWD': 'KWD', 'QAR': 'QAR',
+      'BHD': 'BHD', 'OMR': 'OMR', 'LBP': 'LBP',
+      'MAD': 'MAD', 'TND': 'TND', 'DZD': 'DZD'
+    };
+    
     return new Intl.NumberFormat('ar-SA', {
       style: 'currency',
-      currency: currency === 'USD' ? 'USD' : 'SAR',
+      currency: currencyMap[currency] || 'USD',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(Math.abs(value));

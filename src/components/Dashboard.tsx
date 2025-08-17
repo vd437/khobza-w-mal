@@ -60,7 +60,7 @@ export function Dashboard() {
                 <span className="font-semibold text-success">
                   {settings.hideAmounts ? '****' : new Intl.NumberFormat('ar-SA', {
                     style: 'currency',
-                    currency: settings.currency === 'USD' ? 'USD' : 'SAR',
+                    currency: settings.currency,
                     minimumFractionDigits: 0,
                   }).format(stats.monthlyIncome)}
                 </span>
@@ -70,7 +70,7 @@ export function Dashboard() {
                 <span className="font-semibold text-danger">
                   {settings.hideAmounts ? '****' : new Intl.NumberFormat('ar-SA', {
                     style: 'currency',
-                    currency: settings.currency === 'USD' ? 'USD' : 'SAR',
+                    currency: settings.currency,
                     minimumFractionDigits: 0,
                   }).format(stats.monthlyExpenses)}
                 </span>
@@ -83,7 +83,7 @@ export function Dashboard() {
                   }`}>
                     {settings.hideAmounts ? '****' : new Intl.NumberFormat('ar-SA', {
                       style: 'currency',
-                      currency: settings.currency === 'USD' ? 'USD' : 'SAR',
+                      currency: settings.currency,
                       minimumFractionDigits: 0,
                     }).format(stats.monthlyIncome - stats.monthlyExpenses)}
                   </span>
@@ -94,21 +94,39 @@ export function Dashboard() {
 
           {/* نصائح سريعة */}
           <div className="bg-gradient-to-br from-secondary/10 to-secondary-glow/10 rounded-lg p-6 border border-secondary/20">
-            <h3 className="text-lg font-semibold mb-4 text-secondary">💡 نصائح مالية</h3>
+            <h3 className="text-lg font-semibold mb-4 text-secondary flex items-center gap-2">
+              <TrendingUp className="h-5 w-5" />
+              نصائح مالية
+            </h3>
             <div className="space-y-2 text-sm">
               {stats.monthlyExpenses > stats.monthlyIncome && (
-                <p className="text-danger">⚠️ مصروفاتك الشهرية تتجاوز دخلك</p>
+                <p className="text-danger flex items-center gap-2">
+                  <TrendingDown className="h-4 w-4" />
+                  مصروفاتك الشهرية تتجاوز دخلك
+                </p>
               )}
               {stats.balance < 0 && (
-                <p className="text-danger">⚠️ رصيدك سالب، راجع مصروفاتك</p>
+                <p className="text-danger flex items-center gap-2">
+                  <Wallet className="h-4 w-4" />
+                  رصيدك سالب، راجع مصروفاتك
+                </p>
               )}
               {stats.monthlyExpenses === 0 && (
-                <p className="text-muted-foreground">📝 ابدأ بإضافة مصروفاتك لتتبع أفضل</p>
+                <p className="text-muted-foreground flex items-center gap-2">
+                  <DollarSign className="h-4 w-4" />
+                  ابدأ بإضافة مصروفاتك لتتبع أفضل
+                </p>
               )}
               {stats.balance > 0 && stats.monthlyIncome > stats.monthlyExpenses && (
-                <p className="text-success">✅ أحسنت! لديك فائض مالي هذا الشهر</p>
+                <p className="text-success flex items-center gap-2">
+                  <TrendingUp className="h-4 w-4" />
+                  أحسنت! لديك فائض مالي هذا الشهر
+                </p>
               )}
-              <p className="text-muted-foreground">💰 راجع مصروفاتك بانتظام لتحقيق أهدافك المالية</p>
+              <p className="text-muted-foreground flex items-center gap-2">
+                <DollarSign className="h-4 w-4" />
+                راجع مصروفاتك بانتظام لتحقيق أهدافك المالية
+              </p>
             </div>
           </div>
 
